@@ -9,43 +9,77 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Varsayılan olarak İngilizce gizli */
-        .lang-en { display: none; }
-        
-        /* İngilizce mod aktifken Türkçe gizlenir, İngilizce görünür */
-        body.language-en .lang-tr { display: none !important; }
-        body.language-en .lang-en { display: inline-block !important; } /* inline-block hizalama sorunlarını çözer */
-        
-        /* Blok elementler için (p, div, h) display ayarı */
-        body.language-en div.lang-en, 
-        body.language-en p.lang-en, 
-        body.language-en h1.lang-en, 
-        body.language-en h2.lang-en, 
-        body.language-en h3.lang-en, 
-        body.language-en h4.lang-en { 
-            display: block !important; 
+        /* Dil Değiştirici Stilleri */
+        .language-wrapper {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
         }
 
-        /* Dil Butonu Stili */
-        .lang-btn {
-            background: transparent;
-            border: 1px solid #fff; /* Navbar rengine göre değişebilir */
-            color: #fff; /* Navbar rengine göre değişebilir */
-            padding: 5px 10px;
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
             cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            border-radius: 5px;
-            margin-left: 15px;
-            transition: all 0.3s ease;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #2196F3;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
         }
-        .lang-btn:hover {
-            background: #fff;
-            color: #333;
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+            z-index: 2;
         }
-        
-        /* Mobilde butonun konumu için */
+
+        input:checked + .slider {
+            background-color: #f0ad4e;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(30px);
+            -ms-transform: translateX(30px);
+            transform: translateX(30px);
+        }
+
+        /* Responsive düzenleme: Mobilde burger menünün yanında düzgün durması için */
         @media screen and (max-width: 768px) {
-             .lang-btn { margin: 10px 0; border-color: #333; color: #333; }
+            .language-wrapper {
+                position: absolute;
+                right: 70px; /* Burger menünün soluna */
+                top: 25px;
+            }
         }
     </style>
 </head>
@@ -54,34 +88,24 @@
     <nav class="navbar">
         <div class="logo">Seydi Ali İçlek</div>
         <ul class="nav-links">
-            <li><a href="#home">
-                <span class="lang-tr">Ana Sayfa</span>
-                <span class="lang-en">Home</span>
-            </a></li>
-            <li><a href="#about">
-                <span class="lang-tr">Hakkımda</span>
-                <span class="lang-en">About</span>
-            </a></li>
-            <li><a href="#experience">
-                <span class="lang-tr">Deneyim</span>
-                <span class="lang-en">Experience</span>
-            </a></li>
-            <li><a href="#education">
-                <span class="lang-tr">Eğitim</span>
-                <span class="lang-en">Education</span>
-            </a></li>
-            <li><a href="#projects">
-                <span class="lang-tr">Projeler</span>
-                <span class="lang-en">Projects</span>
-            </a></li>
-            <li><a href="#contact">
-                <span class="lang-tr">İletişim</span>
-                <span class="lang-en">Contact</span>
-            </a></li>
-            <li>
-                <button id="lang-toggle" class="lang-btn">EN</button>
-            </li>
+            <li><a href="#home" data-lang="nav_home">Ana Sayfa</a></li>
+            <li><a href="#about" data-lang="nav_about">Hakkımda</a></li>
+            <li><a href="#experience" data-lang="nav_experience">Deneyim</a></li>
+            <li><a href="#education" data-lang="nav_education">Eğitim</a></li>
+            <li><a href="#projects" data-lang="nav_projects">Projeler</a></li>
+            <li><a href="#contact" data-lang="nav_contact">İletişim</a></li>
         </ul>
+
+        <div class="language-wrapper">
+            <label class="switch">
+                <input type="checkbox" id="language-toggle">
+                <span class="slider">
+                    <span>TR</span>
+                    <span>EN</span>
+                </span>
+            </label>
+        </div>
+
         <div class="burger">
             <div class="line1"></div>
             <div class="line2"></div>
@@ -94,33 +118,13 @@
             <div class="profile-img-container">
                 <img src="VESIKALIK_FOTOGRAF_SEYDI_ALI_ICLEK.png" alt="Seydi Ali İçlek" class="profile-img">
             </div>
-            
-            <h1>
-                <span class="lang-tr">Merhaba, Ben <span class="highlight">Seydi Ali</span></span>
-                <span class="lang-en">Hello, I'm <span class="highlight">Seydi Ali</span></span>
-            </h1>
-            
-            <h2 class="typing-text">
-                <span class="lang-tr">Bilgisayar & Endüstri Mühendisliği Öğrencisi</span>
-                <span class="lang-en">Computer & Industrial Engineering Student</span>
-            </h2>
-            
-            <p>
-                <span class="lang-tr">Otonom Sistemler | ROS Geliştirici | Takım Lideri</span>
-                <span class="lang-en">Autonomous Systems | ROS Developer | Team Leader</span>
-            </p>
-            
+            <h1><span data-lang="hero_hello">Merhaba, Ben</span> <span class="highlight">Seydi Ali</span></h1>
+            <h2 class="typing-text" data-lang="hero_role">Bilgisayar & Endüstri Mühendisliği Öğrencisi</h2>
+            <p data-lang="hero_sub">Otonom Sistemler | ROS Geliştirici | Takım Lideri</p>
             <div class="hero-btns">
-                <a href="#projects" class="btn btn-primary">
-                    <span class="lang-tr">Projelerimi Gör</span>
-                    <span class="lang-en">View Projects</span>
-                </a>
-                <a href="#contact" class="btn btn-secondary">
-                    <span class="lang-tr">İletişime Geç</span>
-                    <span class="lang-en">Contact Me</span>
-                </a>
+                <a href="#projects" class="btn btn-primary" data-lang="btn_projects">Projelerimi Gör</a>
+                <a href="#contact" class="btn btn-secondary" data-lang="btn_contact">İletişime Geç</a>
             </div>
-            
             <div class="social-icons">
                 <a href="https://www.linkedin.com/in/seydi-ali-iclek" target="_blank"><i class="fab fa-linkedin"></i></a>
                 <a href="mailto:seydialiiclek@gmail.com"><i class="fas fa-envelope"></i></a>
@@ -131,43 +135,25 @@
 
     <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title">
-                <span class="lang-tr">Hakkımda</span>
-                <span class="lang-en">About Me</span>
-            </h2>
+            <h2 class="section-title" data-lang="section_about">Hakkımda</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <p class="lang-tr" style="text-align: justify;">
+                    <p style="text-align: justify;" data-lang="about_p1">
                         Düzce Üniversitesi <strong>Bilgisayar Mühendisliği</strong> 4. sınıf öğrencisiyim ve aynı zamanda <strong>Endüstri Mühendisliği</strong> çift anadal programını yürütmekteyim. 
                     </p>
-                    <p class="lang-en" style="text-align: justify;">
-                        I am a 4th-year <strong>Computer Engineering</strong> student at Düzce University, also pursuing a double major in <strong>Industrial Engineering</strong>.
-                    </p>
-
-                    <p class="lang-tr" style="text-align: justify;">
+                    <p style="text-align: justify;" data-lang="about_p2">
                         Özellikle otonom sistemler, robotik ve yapay zeka üzerine yoğunlaştım. <strong>Python, ROS ve PyQt6</strong> teknolojilerini kullanarak insansız araçlar üzerine projeler geliştirdim. 
                         Takım çalışmasına inanan biri olarak, Teknofest ve diğer ulusal yarışmalarda <strong>Takım Kaptanı</strong> olarak görev aldım ve dereceler elde ettim.
                     </p>
-                    <p class="lang-en" style="text-align: justify;">
-                        I focus especially on autonomous systems, robotics, and artificial intelligence. I have developed projects on unmanned vehicles using <strong>Python, ROS, and PyQt6</strong> technologies. 
-                        Believing in teamwork, I have served as a <strong>Team Captain</strong> in Teknofest and other national competitions, achieving various awards.
-                    </p>
-
                     <div class="skills-grid">
                         <span class="skill-tag">Python</span>
                         <span class="skill-tag">ROS (Robot Operating System)</span>
                         <span class="skill-tag">C++</span>
                         <span class="skill-tag">PyQt6</span>
                         <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">
-                            <span class="lang-tr">Gömülü Sistemler</span>
-                            <span class="lang-en">Embedded Systems</span>
-                        </span>
+                        <span class="skill-tag" data-lang="skill_embedded">Gömülü Sistemler</span>
                         <span class="skill-tag">YOLO / Computer Vision</span>
-                        <span class="skill-tag">
-                            <span class="lang-tr">Liderlik</span>
-                            <span class="lang-en">Leadership</span>
-                        </span>
+                        <span class="skill-tag" data-lang="skill_leadership">Liderlik</span>
                     </div>
                 </div>
             </div>
@@ -176,35 +162,24 @@
 
     <section id="experience" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">
-                <span class="lang-tr">İş Deneyimi</span>
-                <span class="lang-en">Work Experience</span>
-            </h2>
+            <h2 class="section-title" data-lang="section_experience">İş Deneyimi</h2>
             <div class="timeline">
                 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>
-                            <span class="lang-tr">UI/UX Tasarım Stajyeri (Zorunlu Staj)</span>
-                            <span class="lang-en">UI/UX Design Intern (Compulsory)</span>
-                        </h3>
+                        <h3 data-lang="exp_1_title">UI/UX Tasarım Stajyeri (Zorunlu Staj)</h3>
                         <span class="date">11.08.2025 - 12.09.2025</span>
                         <h4>Phexum Yazılım A.Ş.</h4>
-                        <p class="lang-tr">Kullanıcı deneyimi ve arayüz tasarım süreçlerinde aktif rol aldım. Web arayüzlerinin modernizasyonu ve Frontend (HTML/CSS/JS) dönüşümlerinde çalıştım.</p>
-                        <p class="lang-en">Took an active role in user experience and interface design processes. Worked on modernization of web interfaces and Frontend (HTML/CSS/JS) transformations.</p>
+                        <p data-lang="exp_1_desc">Kullanıcı deneyimi ve arayüz tasarım süreçlerinde aktif rol aldım. Web arayüzlerinin modernizasyonu ve Frontend (HTML/CSS/JS) dönüşümlerinde çalıştım.</p>
                     </div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>
-                            <span class="lang-tr">Mühendislik Stajyeri (Gönüllü Staj)</span>
-                            <span class="lang-en">Engineering Intern (Voluntary)</span>
-                        </h3>
+                        <h3 data-lang="exp_2_title">Mühendislik Stajyeri (Gönüllü Staj)</h3>
                         <span class="date">21.07.2025 – 15.08.2025</span>
                         <h4>SCA Social</h4>
-                        <p class="lang-tr">Proje Yönetimi, Bilişim Hukuku, Yönetim ve Organizasyon, Yapay Zeka ve Veri Bilimi alanlarında eğitim aldım ve yetkinlik kazandım.</p>
-                        <p class="lang-en">Received training and gained competence in Project Management, IT Law, Management and Organization, Artificial Intelligence, and Data Science.</p>
+                        <p data-lang="exp_2_desc">Proje Yönetimi, Bilişim Hukuku, Yönetim ve Organizasyon, Yapay Zeka ve Veri Bilimi alanlarında eğitim aldım ve yetkinlik kazandım.</p>
                     </div>
                 </div>
 
@@ -214,41 +189,24 @@
 
     <section id="education" class="section">
         <div class="container">
-            <h2 class="section-title">
-                <span class="lang-tr">Eğitim Bilgileri</span>
-                <span class="lang-en">Education</span>
-            </h2>
+            <h2 class="section-title" data-lang="section_education">Eğitim Bilgileri</h2>
             <div class="timeline">
                 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>
-                            <span class="lang-tr">Bilgisayar Mühendisliği (Lisans)</span>
-                            <span class="lang-en">Computer Engineering (Bachelor's)</span>
-                        </h3>
-                        <span class="date">
-                            <span class="lang-tr">Devam Ediyor</span>
-                            <span class="lang-en">Ongoing</span>
-                        </span>
+                        <h3 data-lang="edu_1_title">Bilgisayar Mühendisliği (Lisans)</h3>
+                        <span class="date" data-lang="date_ongoing">Devam Ediyor</span>
                         <h4>Düzce Üniversitesi</h4>
-                        <p class="lang-tr">4. Sınıf Öğrencisiyim. Bitirme projesini yapay zeka tabanlı insansız kara araçları üzerine yapmaktayım. Not Ortalaması: 3.13 / 4.00</p>
-                        <p class="lang-en">4th Year Student. Working on a graduation project on AI-based unmanned ground vehicles. GPA: 3.13 / 4.00</p>
+                        <p data-lang="edu_1_desc">4. Sınıf Öğrencisiyim. Bitirme projesini yapay zeka tabanlı insansız kara araçları üzerine yapmaktayım. Not Ortalaması: 3.13 / 4.00</p>
                     </div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>
-                            <span class="lang-tr">Endüstri Mühendisliği (Çift Anadal)</span>
-                            <span class="lang-en">Industrial Engineering (Double Major)</span>
-                        </h3>
-                        <span class="date">
-                            <span class="lang-tr">Eylül 2023 - Devam Ediyor</span>
-                            <span class="lang-en">Sep 2023 - Ongoing</span>
-                        </span>
+                        <h3 data-lang="edu_2_title">Endüstri Mühendisliği (Çift Anadal)</h3>
+                        <span class="date" data-lang="edu_2_date">Eylül 2023 - Devam Ediyor</span>
                         <h4>Düzce Üniversitesi</h4>
-                        <p class="lang-tr">Not Ortalaması: 2.20/ 4.00</p>
-                        <p class="lang-en">GPA: 2.20 / 4.00</p>
+                        <p data-lang="edu_2_desc">Not Ortalaması: 2.20/ 4.00</p>
                     </div>
                 </div>
 
@@ -258,75 +216,38 @@
 
     <section id="projects" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">
-                <span class="lang-tr">Projeler ve Başarılar</span>
-                <span class="lang-en">Projects & Achievements</span>
-            </h2>
+            <h2 class="section-title" data-lang="section_projects">Projeler ve Başarılar</h2>
             <div class="projects-grid">
                 
                 <div class="project-card">
                     <div class="card-icon"><i class="fas fa-water"></i></div>
-                    <h3>
-                        <span class="lang-tr">Genç Kalyon İnsansız Su Altı Roket Takımı</span>
-                        <span class="lang-en">Genç Kalyon Unmanned Underwater Rocket Team</span>
-                    </h3>
-                    <p class="role">
-                        <span class="lang-tr">Takım Kaptanı</span>
-                        <span class="lang-en">Team Captain</span>
-                    </p>
-                    <p class="lang-tr">ROKETSAN yarışmasında finalist başarısı. Su altı sistemleri üzerine yazılımsal ve elektronik geliştirmeler.</p>
-                    <p class="lang-en">Finalist in ROKETSAN competition. Software and electronic development on underwater systems.</p>
-                    <span class="badge">Teknofest 2025 Finalist</span>
+                    <h3 data-lang="proj_1_title">ROKETSAN İnsansız Su Altı Roket Yarışması</h3>
+                    <p class="role" data-lang="role_captain">Takım Kaptanı</p>
+                    <p data-lang="proj_1_desc">Genç Kalyon Takımı olarak finalist başarısı elde ettik. Su altı sistemleri üzerine yazılımsal ve elektronik geliştirmeler deneyimledim.</p>
+                    <span class="badge" data-lang="proj_1_badge">Teknofest 2025 Finalist</span>
                 </div>
 
                 <div class="project-card">
                     <div class="card-icon"><i class="fas fa-ship"></i></div>
-                    <h3>
-                        <span class="lang-tr">İnsansız Deniz Aracı (İDA)</span>
-                        <span class="lang-en">Unmanned Surface Vehicle (USV)</span>
-                    </h3>
-                    <p class="role">
-                        <span class="lang-tr">Takım Kaptanı</span>
-                        <span class="lang-en">Team Captain</span>
-                    </p>
-                    <p class="lang-tr">ASELSAN İnsansız Deniz Aracı Yarışması'nda otonom sürüş algoritmaları ve sistem entegrasyonu.</p>
-                    <p class="lang-en">Autonomous driving algorithms and system integration in ASELSAN Unmanned Surface Vehicle Competition.</p>
-                    <span class="badge gold">
-                        <span class="lang-tr">Teknofest 2024 Üçüncülük Ödülü</span>
-                        <span class="lang-en">Teknofest 2024 3rd Place Award</span>
-                    </span>
+                    <h3 data-lang="proj_2_title">ASELSAN İnsansız Deniz Aracı Yarışması</h3>
+                    <p class="role" data-lang="role_captain">Takım Kaptanı</p>
+                    <p data-lang="proj_2_desc">Genç Kadırga Takımı olarak üçüncülük elde ettik. Otonom sürüş algoritmaları ve sistem entegrasyonu deneyimi elde ettim.</p>
+                    <span class="badge gold" data-lang="proj_2_badge">Teknofest 2024 Üçüncülük Ödülü</span>
                 </div>
 
                 <div class="project-card">
                     <div class="card-icon"><i class="fas fa-satellite"></i></div>
-                    <h3>
-                        <span class="lang-tr">Sürü Uydu Projesi</span>
-                        <span class="lang-en">Swarm Satellite Project</span>
-                    </h3>
-                    <p class="role">
-                        <span class="lang-tr">Araştırmacı</span>
-                        <span class="lang-en">Researcher</span>
-                    </p>
-                    <p class="lang-tr">Düzce & Bolu Ar-Ge Proje Pazarı'nda Ali Kuşçu Genç Yetenekler kategorisinde birincilik.</p>
-                    <p class="lang-en">First place in Ali Kuşçu Young Talents category at Düzce & Bolu R&D Project Market.</p>
-                    <span class="badge gold">
-                        <span class="lang-tr">Birincilik Ödülü</span>
-                        <span class="lang-en">First Place Award</span>
-                    </span>
+                    <h3 data-lang="proj_3_title">Düzce & Bolu Ar-Ge Proje Pazarı Yarışması</h3>
+                    <p class="role" data-lang="role_researcher">Araştırmacı</p>
+                    <p data-lang="proj_3_desc">Düzce & Bolu Ar-Ge Proje Pazarı'nda Ali Kuşçu Genç Yetenekler kategorisinde birincilik elde ettik.</p>
+                    <span class="badge gold" data-lang="proj_3_badge">Birincilik Ödülü</span>
                 </div>
 
                 <div class="project-card">
                     <div class="card-icon"><i class="fas fa-satellite-dish"></i></div>
-                    <h3>
-                        <span class="lang-tr">TÜRKSAT Model Uydu</span>
-                        <span class="lang-en">TÜRKSAT Model Satellite</span>
-                    </h3>
-                    <p class="role">
-                        <span class="lang-tr">Yazılım Kaptanı</span>
-                        <span class="lang-en">Software Lead</span>
-                    </p>
-                    <p class="lang-tr">RF Haberleşme ve yer istasyonu yazılımları üzerine çalışmalar.</p>
-                    <p class="lang-en">Studies on RF Communication and ground station software.</p>
+                    <h3 data-lang="proj_4_title">TÜRKSAT Model Uydu Yarışması</h3>
+                    <p class="role" data-lang="role_sw_captain">Yazılım Kaptanı</p>
+                    <p data-lang="proj_4_desc">MEKATEK Takımında RF Haberleşme ve yer istasyonu yazılımları üzerine çalışmalar yaptım.</p>
                 </div>
 
             </div>
@@ -335,10 +256,7 @@
 
     <section id="contact" class="section bg-dark">
         <div class="container">
-            <h2 class="section-title text-white">
-                <span class="lang-tr">İletişim</span>
-                <span class="lang-en">Contact</span>
-            </h2>
+            <h2 class="section-title text-white" data-lang="section_contact">İletişim</h2>
             <div class="contact-content">
                 <div class="contact-links">
                     <a href="mailto:seydialiiclek@gmail.com" class="contact-item">
@@ -347,47 +265,155 @@
                     </a>
                     <a href="https://www.linkedin.com/in/seydi-ali-iclek" target="_blank" class="contact-item">
                         <i class="fab fa-linkedin"></i> 
-                        <span>
-                            <span class="lang-tr">LinkedIn Profili</span>
-                            <span class="lang-en">LinkedIn Profile</span>
-                        </span>
+                        <span data-lang="contact_linkedin">LinkedIn Profili</span>
                     </a>
                     <a href="https://drive.google.com/file/d/13pgU59V1eBCknI8-T5oOZGDGEPPcItQT/view?usp=sharing" target="_blank" class="contact-item">
                         <i class="fas fa-file-alt"></i> 
-                        <span>
-                            <span class="lang-tr">CV'ime Göz Atın</span>
-                            <span class="lang-en">View My CV</span>
-                        </span>
+                        <span data-lang="contact_cv">CV'ime Göz Atın</span>
                     </a>
                     <div class="contact-item location-item">
                         <i class="fas fa-map-marker-alt"></i> 
-                        <span>Turkey, İstanbul</span>
+                        <span data-lang="contact_location">İstanbul, Türkiye</span>
                     </div>
                 </div>
             </div>
             <footer class="footer">
-                <p>&copy; 2026 Seydi Ali İçlek. 
-                    <span class="lang-tr">Tüm hakları saklıdır.</span>
-                    <span class="lang-en">All rights reserved.</span>
-                </p>
+                <p>&copy; 2026 Seydi Ali İçlek. <span data-lang="footer_rights">Tüm hakları saklıdır.</span></p>
             </footer>
         </div>
     </section>
 
-    <script src="script.js"></script>
-    
     <script>
-        const langBtn = document.getElementById('lang-toggle');
-        
-        langBtn.addEventListener('click', () => {
-            document.body.classList.toggle('language-en');
-            
-            if (document.body.classList.contains('language-en')) {
-                langBtn.textContent = 'TR';
-            } else {
-                langBtn.textContent = 'EN';
+        // Dil Çevirileri Sözlüğü
+        const translations = {
+            tr: {
+                nav_home: "Ana Sayfa",
+                nav_about: "Hakkımda",
+                nav_experience: "Deneyim",
+                nav_education: "Eğitim",
+                nav_projects: "Projeler",
+                nav_contact: "İletişim",
+                hero_hello: "Merhaba, Ben",
+                hero_role: "Bilgisayar & Endüstri Mühendisliği Öğrencisi",
+                hero_sub: "Otonom Sistemler | ROS Geliştirici | Takım Lideri",
+                btn_projects: "Projelerimi Gör",
+                btn_contact: "İletişime Geç",
+                section_about: "Hakkımda",
+                about_p1: "Düzce Üniversitesi <strong>Bilgisayar Mühendisliği</strong> 4. sınıf öğrencisiyim ve aynı zamanda <strong>Endüstri Mühendisliği</strong> çift anadal programını yürütmekteyim.",
+                about_p2: "Özellikle otonom sistemler, robotik ve yapay zeka üzerine yoğunlaştım. <strong>Python, ROS ve PyQt6</strong> teknolojilerini kullanarak insansız araçlar üzerine projeler geliştirdim. Takım çalışmasına inanan biri olarak, Teknofest ve diğer ulusal yarışmalarda <strong>Takım Kaptanı</strong> olarak görev aldım ve dereceler elde ettim.",
+                skill_embedded: "Gömülü Sistemler",
+                skill_leadership: "Liderlik",
+                section_experience: "İş Deneyimi",
+                exp_1_title: "UI/UX Tasarım Stajyeri (Zorunlu Staj)",
+                exp_1_desc: "Kullanıcı deneyimi ve arayüz tasarım süreçlerinde aktif rol aldım. Web arayüzlerinin modernizasyonu ve Frontend (HTML/CSS/JS) dönüşümlerinde çalıştım.",
+                exp_2_title: "Mühendislik Stajyeri (Gönüllü Staj)",
+                exp_2_desc: "Proje Yönetimi, Bilişim Hukuku, Yönetim ve Organizasyon, Yapay Zeka ve Veri Bilimi alanlarında eğitim aldım ve yetkinlik kazandım.",
+                section_education: "Eğitim Bilgileri",
+                edu_1_title: "Bilgisayar Mühendisliği (Lisans)",
+                date_ongoing: "Devam Ediyor",
+                edu_1_desc: "4. Sınıf Öğrencisiyim. Bitirme projesini yapay zeka tabanlı insansız kara araçları üzerine yapmaktayım. Not Ortalaması: 3.13 / 4.00",
+                edu_2_title: "Endüstri Mühendisliği (Çift Anadal)",
+                edu_2_date: "Eylül 2023 - Devam Ediyor",
+                edu_2_desc: "Not Ortalaması: 2.20/ 4.00",
+                section_projects: "Projeler ve Başarılar",
+                proj_1_title: "ROKETSAN İnsansız Su Altı Roket Yarışması",
+                role_captain: "Takım Kaptanı",
+                proj_1_desc: "Genç Kalyon Takımı olarak finalist başarısı elde ettik. Su altı sistemleri üzerine yazılımsal ve elektronik geliştirmeler deneyimledim.",
+                proj_1_badge: "Teknofest 2025 Finalist",
+                proj_2_title: "ASELSAN İnsansız Deniz Aracı Yarışması",
+                proj_2_desc: "Genç Kadırga Takımı olarak üçüncülük elde ettik. Otonom sürüş algoritmaları ve sistem entegrasyonu deneyimi elde ettim.",
+                proj_2_badge: "Teknofest 2024 Üçüncülük Ödülü",
+                proj_3_title: "Düzce & Bolu Ar-Ge Proje Pazarı Yarışması",
+                role_researcher: "Araştırmacı",
+                proj_3_desc: "Düzce & Bolu Ar-Ge Proje Pazarı'nda Ali Kuşçu Genç Yetenekler kategorisinde birincilik elde ettik.",
+                proj_3_badge: "Birincilik Ödülü",
+                proj_4_title: "TÜRKSAT Model Uydu Yarışması",
+                role_sw_captain: "Yazılım Kaptanı",
+                proj_4_desc: "MEKATEK Takımında RF Haberleşme ve yer istasyonu yazılımları üzerine çalışmalar yaptım.",
+                section_contact: "İletişim",
+                contact_linkedin: "LinkedIn Profili",
+                contact_cv: "CV'ime Göz Atın",
+                contact_location: "İstanbul, Türkiye",
+                footer_rights: "Tüm hakları saklıdır."
+            },
+            en: {
+                nav_home: "Home",
+                nav_about: "About",
+                nav_experience: "Experience",
+                nav_education: "Education",
+                nav_projects: "Projects",
+                nav_contact: "Contact",
+                hero_hello: "Hello, I'm",
+                hero_role: "Computer & Industrial Engineering Student",
+                hero_sub: "Autonomous Systems | ROS Developer | Team Leader",
+                btn_projects: "View Projects",
+                btn_contact: "Contact Me",
+                section_about: "About Me",
+                about_p1: "I am a 4th-year <strong>Computer Engineering</strong> student at Düzce University and also pursuing a Double Major in <strong>Industrial Engineering</strong>.",
+                about_p2: "I focused specifically on autonomous systems, robotics, and artificial intelligence. I developed projects on unmanned vehicles using <strong>Python, ROS, and PyQt6</strong> technologies. Believing in teamwork, I served as <strong>Team Captain</strong> in Teknofest and other national competitions and achieved high degrees.",
+                skill_embedded: "Embedded Systems",
+                skill_leadership: "Leadership",
+                section_experience: "Experience",
+                exp_1_title: "UI/UX Design Intern (Compulsory)",
+                exp_1_desc: "Took an active role in user experience and interface design processes. Worked on the modernization of web interfaces and Frontend (HTML/CSS/JS) transformations.",
+                exp_2_title: "Engineering Intern (Voluntary)",
+                exp_2_desc: "Received training and gained competence in Project Management, IT Law, Management and Organization, Artificial Intelligence, and Data Science.",
+                section_education: "Education",
+                edu_1_title: "Computer Engineering (Bachelor's)",
+                date_ongoing: "Continuing",
+                edu_1_desc: "4th Year Student. I am working on AI-based unmanned ground vehicles for my graduation project. GPA: 3.13 / 4.00",
+                edu_2_title: "Industrial Engineering (Double Major)",
+                edu_2_date: "September 2023 - Continuing",
+                edu_2_desc: "GPA: 2.20 / 4.00",
+                section_projects: "Projects & Achievements",
+                proj_1_title: "ROKETSAN Unmanned Underwater Rocket Competition",
+                role_captain: "Team Captain",
+                proj_1_desc: "Achieved finalist status as Genç Kalyon Team. Experienced software and electronic developments on underwater systems.",
+                proj_1_badge: "Teknofest 2025 Finalist",
+                proj_2_title: "ASELSAN Unmanned Surface Vehicle Competition",
+                proj_2_desc: "Achieved third place as Genç Kadırga Team. Gained experience in autonomous driving algorithms and system integration.",
+                proj_2_badge: "Teknofest 2024 3rd Place Award",
+                proj_3_title: "Düzce & Bolu R&D Project Market Competition",
+                role_researcher: "Researcher",
+                proj_3_desc: "Won first place in the Ali Kuşçu Young Talents category at the Düzce & Bolu R&D Project Market.",
+                proj_3_badge: "First Place Award",
+                proj_4_title: "TURKSAT Model Satellite Competition",
+                role_sw_captain: "Software Captain",
+                proj_4_desc: "Worked on RF Communication and ground station software in the MEKATEK Team.",
+                section_contact: "Contact",
+                contact_linkedin: "LinkedIn Profile",
+                contact_cv: "View My CV",
+                contact_location: "Istanbul, Turkey",
+                footer_rights: "All rights reserved."
             }
+        };
+
+        const languageToggle = document.getElementById('language-toggle');
+        
+        languageToggle.addEventListener('change', function() {
+            const lang = this.checked ? 'en' : 'tr';
+            changeLanguage(lang);
         });
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang]');
+            
+            elements.forEach(element => {
+                const key = element.getAttribute('data-lang');
+                if (translations[lang][key]) {
+                    // Eğer içerik HTML içeriyorsa (örneğin <strong> etiketleri) innerHTML kullanıyoruz
+                    if(element.innerHTML.includes('<') && element.tagName !== 'A') {
+                        element.innerHTML = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // HTML lang attribute güncelle
+            document.documentElement.lang = lang;
+        }
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
